@@ -9,7 +9,6 @@ const App = () => {
 		fetch("")
 		.then((res)=>res.json())
 	})
-
 	return (
 		<div className="container">
 			<Header />
