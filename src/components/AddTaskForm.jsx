@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 const AddTaskForm = () => {
 	return (
@@ -12,7 +12,6 @@ const AddTaskForm = () => {
 				<button id="add-task-btn">
 					<i className="fas fa-plus"></i>
 				</button>
-				
 			</form>
 		</div>
 	);
