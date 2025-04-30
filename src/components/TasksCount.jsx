@@ -1,15 +1,12 @@
 import React from 'react';
 
 const TasksCount = ({ tasks }) => {
-	return (
-		<div className="task-stats">
-			<p>
-				<span id="tasks-count">
-					{tasks.filter(task => !task.completed).length}
-				</span> tasks left
-			</p>
-		</div>
-	);
+    const completedTasks = tasks.filter(task => task.completed).length;
+    return (
+        <div className="tasks-count">
+            <p>{completedTasks} of {tasks.length} tasks completed</p>
+        </div>
+    );
 };
 
 export default TasksCount;

@@ -3,10 +3,28 @@ import AddTaskForm from './components/AddTaskForm';
 import Header from './components/Header';
 import TasksContainer from './components/TasksContainer';
 import TasksCount from './components/TasksCount';
-import { tasks as initialTasks } from './data/tasks';
 
 const App = () => {
-    const [tasks, setTasks] = useState(initialTasks);
+    const [tasks, setTasks] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const fetchTasks = async () => {
+            try {
+                const response = await fetch("http://localhost:3000/");
+                if (!response.ok) throw new Error("Failed to fetch tasks.");
+                const data = await response.json();
+                setTasks(data);
+            } catch (error) {
+                setError(error.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchTasks();
+    }, []);
 
     const addTask = async (title) => {
         const newTask = {
@@ -17,7 +35,7 @@ const App = () => {
 
         setTasks((prevTasks) => [...prevTasks, newTask]);
 
-        const response = await fetch("http://localhost:300o/tasks", {
+        const response = await fetch("http://localhost:3000/", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -39,11 +57,18 @@ const App = () => {
         );
     };
 
+    const onDelete = (taskId) => {
+        setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
+    };
+
+    if (loading) return <p>Loading tasks...</p>;
+    if (error) return <p>{error}</p>;
+
     return (
         <div className="container">
             <Header />
             <AddTaskForm onAddTask={addTask} />
-            <TasksContainer tasks={tasks} onToggle={onToggle} />
+            <TasksContainer tasks={tasks} onToggle={onToggle} onDelete={onDelete} />
             <TasksCount tasks={tasks} />
         </div>
     );
